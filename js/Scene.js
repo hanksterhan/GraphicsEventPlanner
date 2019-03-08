@@ -7,6 +7,7 @@ const Scene = function(gl) {
   this.triangleGeometry = new TriangleGeometry(gl);
   this.quadGeometry = new QuadGeometry(gl);
   this.circleGeometry = new CircleGeometry(gl);
+  this.chairGeometry = new ChairGeometry(gl);
   // this.trianglePosition = {x:-0.3, y:0, z:0}
   // this.trianglePosition2 = {x:0.3, y:0, z:0}
 
@@ -22,6 +23,7 @@ const Scene = function(gl) {
   this.cyanTriangle = new Mesh(this.triangleGeometry, this.cyanMaterial);
   this.yellowQuad = new Mesh(this.quadGeometry, this.yellowMaterial);
   this.cyanCircle = new Mesh(this.circleGeometry, this.cyanMaterial);
+  this.yellowChair = new Mesh(this.chairGeometry, this.yellowMaterial);
 
   this.gameObjects = [];
   
@@ -37,10 +39,14 @@ const Scene = function(gl) {
   this.obj4 = new GameObject(this.cyanCircle);
   this.obj4.position.set({x:0.3, y:-0.3, z:0})
 
+  this.chair = new GameObject(this.yellowChair);
+  this.chair.position.set({x:-0.3, y:-0.3, z:0})
+
   //this.gameObjects.push(this.obj1);
   //this.gameObjects.push(this.obj2);
   this.gameObjects.push(this.obj3);
   this.gameObjects.push(this.obj4);
+  this.gameObjects.push(this.chair);
 
   this.camera = new OrthoCamera();
 };
