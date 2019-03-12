@@ -12,6 +12,7 @@ const Scene = function(gl) {
   this.quadGeometry = new QuadGeometry(gl);
   this.circleGeometry = new CircleGeometry(gl);
   this.chairGeometry = new ChairGeometry(gl);
+  this.coatRackGeometry = new CoatRackGeometry(gl);
   
   
   this.timeAtLastFrame = new Date().getTime();
@@ -30,6 +31,7 @@ const Scene = function(gl) {
   this.yellowQuad = new Mesh(this.quadGeometry, this.yellowMaterial);
   this.cyanCircle = new Mesh(this.circleGeometry, this.cyanMaterial);
   this.yellowChair = new Mesh(this.chairGeometry, this.yellowMaterial);
+  this.cyanCoatRack= new Mesh(this.coatRackGeometry, this.cyanMaterial);
 
   this.gameObjects = [];
   
@@ -50,12 +52,16 @@ const Scene = function(gl) {
 
   this.stripes = new GameObject(this.pinkStripedTriangle);
   this.stripes.position.set({x:0, y:0, z:0});
+
+  this.coatRack = new GameObject(this.cyanCoatRack);
+  this.coatRack.position.set({x:0, y:0, z:0});
   //this.gameObjects.push(this.obj1);
   //this.gameObjects.push(this.obj2);
   this.gameObjects.push(this.obj3);
   this.gameObjects.push(this.obj4);
   this.gameObjects.push(this.chair);
   this.gameObjects.push(this.stripes);
+  this.gameObjects.push(this.coatRack);
 
   this.camera = new OrthoCamera();
 };
