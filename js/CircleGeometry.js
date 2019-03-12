@@ -10,8 +10,6 @@ const CircleGeometry = function(gl) {
       this.vertices.push(Math.sin(angle));
       this.vertices.push(0.5);
       angle += (2*Math.PI) / 64;
-      console.log(Math.cos(angle));
-      console.log(Math.sin(angle));
     }
 
   this.colors = [0,0,0]; 
