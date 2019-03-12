@@ -3,15 +3,21 @@ const Scene = function(gl) {
   this.vsIdle = new Shader(gl, gl.VERTEX_SHADER, "idle_vs.essl");
   this.fsSolid = new Shader(gl, gl.FRAGMENT_SHADER, "solid_fs.essl");
   this.solidProgram = new Program(gl, this.vsIdle, this.fsSolid);
+
+  this.vsStriped = new Shader(gl, gl.VERTEX_SHADER, "striped_vs.essl");
+  this.fsStriped = new Shader(gl, gl.FRAGMENT_SHADER, "striped_fs.essl");
+  this.stripedProgram = new Program(gl, this.vsStriped, this.fsStriped);
   
   this.triangleGeometry = new TriangleGeometry(gl);
   this.quadGeometry = new QuadGeometry(gl);
   this.circleGeometry = new CircleGeometry(gl);
   this.chairGeometry = new ChairGeometry(gl);
-  // this.trianglePosition = {x:-0.3, y:0, z:0}
-  // this.trianglePosition2 = {x:0.3, y:0, z:0}
-
+  
+  
   this.timeAtLastFrame = new Date().getTime();
+  
+  this.pinkStripedMaterial = new Material(gl, this.stripedProgram);
+  this.pinkStripedTriangle = new Mesh(this.triangleGeometry, this.pinkStripedMaterial);
 
   this.yellowMaterial = new Material(gl, this.solidProgram);
   this.yellowMaterial.solidColor.set(1,1,0);
@@ -34,19 +40,22 @@ const Scene = function(gl) {
   this.obj2.position.set({x:0.3, y:0, z:0});
 
   this.obj3 = new GameObject(this.yellowQuad);
-  this.obj3.position.set({x:0.3, y:0.3, z:0})
+  this.obj3.position.set({x:0.3, y:0.3, z:0});
 
   this.obj4 = new GameObject(this.cyanCircle);
-  this.obj4.position.set({x:0.3, y:-0.3, z:0})
+  this.obj4.position.set({x:0.3, y:-0.3, z:0});
 
   this.chair = new GameObject(this.yellowChair);
-  this.chair.position.set({x:-0.3, y:-0.3, z:0})
+  this.chair.position.set({x:-0.3, y:-0.3, z:0});
 
+  this.stripes = new GameObject(this.pinkStripedTriangle);
+  this.stripes.position.set({x:0, y:0, z:0});
   //this.gameObjects.push(this.obj1);
   //this.gameObjects.push(this.obj2);
   this.gameObjects.push(this.obj3);
   this.gameObjects.push(this.obj4);
   this.gameObjects.push(this.chair);
+  this.gameObjects.push(this.stripes);
 
   this.camera = new OrthoCamera();
 };
