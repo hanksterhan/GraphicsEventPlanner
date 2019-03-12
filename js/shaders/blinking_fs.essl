@@ -1,0 +1,20 @@
+Shader.source[document.currentScript.src.split('js/shaders/')[1]] = `#version 300 es 
+  precision highp float;
+
+  out vec4 fragmentColor;
+  
+  in vec4 color; // received from VS via RS
+  uniform vec4 solidColor; 
+  uniform vec4 solidColor2;
+  uniform float timeAtLastFrame;
+  uniform float dt;
+  uniform float blinkSpeed;
+
+  void main(void) {
+    if(((dt - timeAtLastFrame) / 1000.0) > blinkSpeed){
+        fragmentColor = solidColor;
+    } else{
+        fragmentColor = solidColor2;
+    }
+  }
+`;

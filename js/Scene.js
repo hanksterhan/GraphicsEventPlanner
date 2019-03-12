@@ -8,14 +8,24 @@ const Scene = function(gl) {
   this.fsStriped = new Shader(gl, gl.FRAGMENT_SHADER, "striped_fs.essl");
   this.stripedProgram = new Program(gl, this.vsStriped, this.fsStriped);
   
+  this.fsBlink = new Shader(gl, gl.FRAGMENT_SHADER, "blinking_fs.essl");
+  this.blinkProgram = new Program(gl, this.vsIdle, this.fsBlink);
+
   this.triangleGeometry = new TriangleGeometry(gl);
   this.quadGeometry = new QuadGeometry(gl);
   this.circleGeometry = new CircleGeometry(gl);
   this.chairGeometry = new ChairGeometry(gl);
   this.coatRackGeometry = new CoatRackGeometry(gl);
   
-  
   this.timeAtLastFrame = new Date().getTime();
+
+  this.blinkingMaterial = new Material(gl, this.blinkProgram);
+  this.blinkingMaterial.solidColor.set(1,0,1);
+  this.blinkingMaterial.solidColor2.set(0,1,1);
+  this.blinkingMaterial.timeAtLastFrame.set(this.timeAtLastFrame);
+  this.blinkingMaterial.dt.set(this.timeAtLastFrame);
+  this.blinkingMaterial.blinkSpeed.set(10);
+  this.blinkingTriangle = new Mesh(this.triangleGeometry, this.blinkingMaterial);
   
   this.pinkStripedMaterial = new Material(gl, this.stripedProgram);
   this.pinkStripedMaterial.stripeColor1.set(1,0,1,1);
@@ -67,6 +77,9 @@ const Scene = function(gl) {
 
   this.coatRack = new GameObject(this.cyanCoatRack);
   this.coatRack.position.set({x:0, y:0, z:0});
+
+  this.blink = new GameObject(this.blinkingTriangle);
+  this.blink.position.set({x:0, y:0, z:0});
   //this.gameObjects.push(this.obj1);
   //this.gameObjects.push(this.obj2);
   this.gameObjects.push(this.obj3);
@@ -75,6 +88,7 @@ const Scene = function(gl) {
   this.gameObjects.push(this.coatRack);
   this.gameObjects.push(this.stripes);
   this.gameObjects.push(this.stripes2);
+  this.gameObjects.push(this.blink);
 
   this.camera = new OrthoCamera();
 
@@ -86,6 +100,21 @@ Scene.prototype.update = function(gl, keysPressed) {
   const timeAtThisFrame = new Date().getTime();
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
+  const dtLocation = gl.getUniformLocation(this.blinkProgram.glProgram, "dt");
+  if (dtLocation == null) {
+    console.log("Could not find uniform dt.");
+  } else {
+    gl.uniform1f(dtLocation, timeAtThisFrame);
+  }
+  
+  if (((timeAtThisFrame - this.blinkingMaterial.timeAtLastFrame) / 1000.0) < this.blinkingMaterial.blinkSpeed){
+    const timeAtLastFrameLocation = gl.getUniformLocation(this.blinkProgram.glProgram, "timeAtLastFrame");
+    if (timeAtLastFrameLocation == null) {
+      console.log("Could not find uniform timeAtLastFrame.");
+    } else {
+      gl.uniform1f(timeAtLastFrameLocation, timeAtThisFrame);
+    }
+  }
 
   // TODO: if we want movement, make a move method inside gameobjects and pass in keyspressed into gameobject
   // TODO: if we want unique movement
