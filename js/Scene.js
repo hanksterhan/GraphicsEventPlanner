@@ -18,7 +18,16 @@ const Scene = function(gl) {
   this.timeAtLastFrame = new Date().getTime();
   
   this.pinkStripedMaterial = new Material(gl, this.stripedProgram);
+  this.pinkStripedMaterial.stripeColor1.set(1,0,1,1);
+  this.pinkStripedMaterial.stripeColor2.set(0.4,0.8,0.3,1);
+  this.pinkStripedMaterial.stripeWidth.set(0.5);
   this.pinkStripedTriangle = new Mesh(this.triangleGeometry, this.pinkStripedMaterial);
+
+  this.yellowStripedMaterial = new Material(gl, this.stripedProgram);
+  this.yellowStripedMaterial.stripeColor1.set(1,1,0,1);
+  this.yellowStripedMaterial.stripeColor2.set(0.8,0.8,0.3,1);
+  this.yellowStripedMaterial.stripeWidth.set(0.8);
+  this.yellowStripedCircle = new Mesh(this.circleGeometry, this.yellowStripedMaterial);
 
   this.yellowMaterial = new Material(gl, this.solidProgram);
   this.yellowMaterial.solidColor.set(1,1,0);
@@ -53,6 +62,9 @@ const Scene = function(gl) {
   this.stripes = new GameObject(this.pinkStripedTriangle);
   this.stripes.position.set({x:0, y:0, z:0});
 
+  this.stripes2 = new GameObject(this.yellowStripedCircle);
+  this.stripes2.position.set({x:0, y:0, z:0});
+
   this.coatRack = new GameObject(this.cyanCoatRack);
   this.coatRack.position.set({x:0, y:0, z:0});
   //this.gameObjects.push(this.obj1);
@@ -60,10 +72,12 @@ const Scene = function(gl) {
   this.gameObjects.push(this.obj3);
   this.gameObjects.push(this.obj4);
   this.gameObjects.push(this.chair);
-  this.gameObjects.push(this.stripes);
   this.gameObjects.push(this.coatRack);
+  this.gameObjects.push(this.stripes);
+  this.gameObjects.push(this.stripes2);
 
   this.camera = new OrthoCamera();
+
 };
 
 Scene.prototype.update = function(gl, keysPressed) {
@@ -129,6 +143,9 @@ Scene.prototype.update = function(gl, keysPressed) {
   
   // this.camera.position.set(this.gameObjects[0].position);
   // this.camera.updateViewProjMatrix();
+
+
+
 
   for (var i=0; i<this.gameObjects.length; i++){
     this.gameObjects[i].draw(this.camera);

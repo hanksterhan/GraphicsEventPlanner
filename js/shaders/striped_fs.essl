@@ -3,16 +3,16 @@ Shader.source[document.currentScript.src.split('js/shaders/')[1]] = `#version 30
 
   out vec4 fragmentColor;
   
+  in vec4 position;
   in vec4 color; // received from VS via RS
-  uniform vec4 solidColor; 
 
   // uniforms for stipped properties:
-  in vec4 stripeColor1; // from VS 
-  in vec4 stripeColor2; // from VS
-  in vec4 position; // from VS
+  uniform vec4 stripeColor1; 
+  uniform vec4 stripeColor2; 
+  uniform float stripeWidth;
 
   void main(void) {
-    if (fract(position.x) < 0.5){
+    if (fract(position[0] / 0.1) < stripeWidth){
         fragmentColor = stripeColor1; 
     } else{
         fragmentColor = stripeColor2;
