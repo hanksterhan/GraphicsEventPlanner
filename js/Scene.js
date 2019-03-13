@@ -3,6 +3,17 @@ const Scene = function(gl) {
   this.vsIdle = new Shader(gl, gl.VERTEX_SHADER, "idle_vs.essl");
   this.fsSolid = new Shader(gl, gl.FRAGMENT_SHADER, "solid_fs.essl");
   this.solidProgram = new Program(gl, this.vsIdle, this.fsSolid);
+  
+  this.vsTextured = new Shader(gl, gl.VERTEX_SHADER, "textured_vs.essl");
+  this.fsTextured = new Shader(gl, gl.FRAGMENT_SHADER, "textured_fs.essl");
+  this.texturedProgram = new Program(gl, this.vsTextured, this.fsTextured);
+
+  this.texturedMaterial = new Material(gl, this.texturedProgram);
+  this.texturedMaterial.colorTexture.set(new Texture2D(gl, "media/asteroid.png"));
+
+  this.texturedQuad = new TexturedQuadGeometry(gl);
+  this.asteroidMesh = new Mesh(this.texturedQuad, this.texturedMaterial);
+  this.asteroid = new GameObject(this.asteroidMesh);
 
   this.vsStriped = new Shader(gl, gl.VERTEX_SHADER, "striped_vs.essl");
   this.fsStriped = new Shader(gl, gl.FRAGMENT_SHADER, "striped_fs.essl");
@@ -16,6 +27,8 @@ const Scene = function(gl) {
   this.circleGeometry = new CircleGeometry(gl);
   this.chairGeometry = new ChairGeometry(gl);
   this.coatRackGeometry = new CoatRackGeometry(gl);
+  this.plantGeometry = new PlantGeometry(gl);
+  this.lampGeometry = new LampGeometry(gl);
   
   this.timeAtLastFrame = new Date().getTime();
 
@@ -41,7 +54,7 @@ const Scene = function(gl) {
   this.yellowStripedCircle = new Mesh(this.circleGeometry, this.yellowStripedMaterial);
 
   this.yellowMaterial = new Material(gl, this.solidProgram);
-  this.yellowMaterial.solidColor.set(1,1,0);
+  this.yellowMaterial.solidColor.set(0,0.5,0.8);
 
   this.cyanMaterial = new Material(gl, this.solidProgram);
   this.cyanMaterial.solidColor.set(0,1,1);
@@ -52,8 +65,14 @@ const Scene = function(gl) {
   this.cyanCircle = new Mesh(this.circleGeometry, this.cyanMaterial);
   this.yellowChair = new Mesh(this.chairGeometry, this.yellowMaterial);
   this.cyanCoatRack= new Mesh(this.coatRackGeometry, this.cyanMaterial);
+  this.cyanPlant = new Mesh(this.plantGeometry, this.cyanMaterial);
+  this.yellowLamp = new Mesh(this.lampGeometry, this.yellowMaterial);
 
   this.gameObjects = [];
+
+  this.asteroid.position.set({x:0.3, y:0, z:0});
+  this.gameObjects.push(this.asteroid);
+
   
   this.obj1 = new GameObject(this.yellowTriangle);
   this.obj1.position.set({x:-0.3, y:0, z:0});
@@ -81,15 +100,22 @@ const Scene = function(gl) {
 
   this.blink = new GameObject(this.blinkingTriangle);
   this.blink.position.set({x:0, y:0, z:0});
+
+  this.plant = new GameObject(this.cyanPlant);
+  this.plant.position.set({x:0, y:0, z:0});
+
+  this.lamp = new GameObject(this.yellowLamp);
+  this.lamp.position.set({x:0, y:0, z:0});
   //this.gameObjects.push(this.obj1);
   //this.gameObjects.push(this.obj2);
-  this.gameObjects.push(this.obj3);
-  this.gameObjects.push(this.obj4);
-  this.gameObjects.push(this.chair);
-  this.gameObjects.push(this.coatRack);
-  this.gameObjects.push(this.stripes);
-  this.gameObjects.push(this.stripes2);
-  this.gameObjects.push(this.blink);
+  // this.gameObjects.push(this.obj3);
+  // this.gameObjects.push(this.obj4);
+  // this.gameObjects.push(this.chair);
+  // this.gameObjects.push(this.coatRack);
+  // this.gameObjects.push(this.stripes);
+  // this.gameObjects.push(this.stripes2);
+  // this.gameObjects.push(this.blink);
+  //this.gameObjects.push(this.lamp);
 
   this.camera = new OrthoCamera();
 
