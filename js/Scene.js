@@ -22,9 +22,10 @@ const Scene = function(gl) {
   this.blinkingMaterial = new Material(gl, this.blinkProgram);
   this.blinkingMaterial.solidColor.set(1,0,1);
   this.blinkingMaterial.solidColor2.set(0,1,1);
-  this.blinkingMaterial.timeAtLastFrame.set(this.timeAtLastFrame);
-  this.blinkingMaterial.dt.set(this.timeAtLastFrame);
-  this.blinkingMaterial.blinkSpeed.set(10);
+  this.blinkingMaterial.dt.set(0);
+  // this.blinkingMaterial.timeAtCreation.set(this.timeAtLastFrame);
+  // this.blinkingMaterial.currentTime.set(this.timeAtLastFrame);
+  this.blinkingMaterial.blinkSpeed.set(0.5);
   this.blinkingTriangle = new Mesh(this.triangleGeometry, this.blinkingMaterial);
   
   this.pinkStripedMaterial = new Material(gl, this.stripedProgram);
@@ -100,22 +101,9 @@ Scene.prototype.update = function(gl, keysPressed) {
   const timeAtThisFrame = new Date().getTime();
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
-  const dtLocation = gl.getUniformLocation(this.blinkProgram.glProgram, "dt");
-  if (dtLocation == null) {
-    console.log("Could not find uniform dt.");
-  } else {
-    gl.uniform1f(dtLocation, timeAtThisFrame);
-  }
-  
-  if (((timeAtThisFrame - this.blinkingMaterial.timeAtLastFrame) / 1000.0) < this.blinkingMaterial.blinkSpeed){
-    const timeAtLastFrameLocation = gl.getUniformLocation(this.blinkProgram.glProgram, "timeAtLastFrame");
-    if (timeAtLastFrameLocation == null) {
-      console.log("Could not find uniform timeAtLastFrame.");
-    } else {
-      gl.uniform1f(timeAtLastFrameLocation, timeAtThisFrame);
-    }
-  }
 
+  this.blinkingMaterial.dt.set(dt * 100);
+  
   // TODO: if we want movement, make a move method inside gameobjects and pass in keyspressed into gameobject
   // TODO: if we want unique movement
   // how to move the triangles from frame to frame
