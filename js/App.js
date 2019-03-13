@@ -45,6 +45,9 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "D"){
       this.keysPressed.D = 1;
     }
+    if(keyboardMap[event.keyCode] === "BACK_QUOTE"){
+      this.keysPressed["BACK_QUOTE"] = 1;
+    }
   };
   document.onkeyup = (event) => {
     if(keyboardMap[event.keyCode] === "W"){
@@ -59,6 +62,10 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "D"){
       this.keysPressed.D = 0;
     }
+    if(keyboardMap[event.keyCode] === "BACK_QUOTE"){
+      this.keysPressed["BACK_QUOTE"] = 0;
+    }
+    console.log(event.keyCode);
   };
   this.canvas.onmousedown = (event) => {
     //jshint unused:false

@@ -9,7 +9,7 @@ const Scene = function(gl) {
   this.texturedProgram = new Program(gl, this.vsTextured, this.fsTextured);
 
   this.texturedMaterial = new Material(gl, this.texturedProgram);
-  this.texturedMaterial.colorTexture.set(new Texture2D(gl, "media/asteroid.png"));
+  // this.texturedMaterial.colorTexture.set(new Texture2D(gl, "media/asteroid.png"));
 
   this.texturedQuad = new TexturedQuadGeometry(gl);
   this.asteroidMesh = new Mesh(this.texturedQuad, this.texturedMaterial);
@@ -66,14 +66,17 @@ const Scene = function(gl) {
   this.cyanPlant = new Mesh(this.plantGeometry, this.cyanMaterial);
   this.yellowLamp = new Mesh(this.lampGeometry, this.yellowMaterial);
 
+  this.selected = []; // contains indices of the objects that are selected
+  this.nextSelectedIndex = 0; // index of the next object to be selected by TAB
+
   this.gameObjects = [];
 
-  this.asteroid.position.set({x:0.3, y:0, z:0});
-  this.gameObjects.push(this.asteroid);
+  // this.asteroid.position.set({x:0.3, y:0, z:0});
+  // this.gameObjects.push(this.asteroid);
 
   
   this.obj1 = new GameObject(this.yellowTriangle);
-  this.obj1.position.set({x:-0.3, y:0, z:0});
+  this.obj1.position.set({x:-1, y:0, z:0});
 
   this.obj2 = new GameObject(this.cyanTriangle);
   this.obj2.position.set({x:0.3, y:0, z:0});
@@ -104,16 +107,16 @@ const Scene = function(gl) {
 
   this.lamp = new GameObject(this.yellowLamp);
   this.lamp.position.set({x:0, y:0, z:0});
-  //this.gameObjects.push(this.obj1);
+  this.gameObjects.push(this.obj1);
   //this.gameObjects.push(this.obj2);
   // this.gameObjects.push(this.obj3);
   // this.gameObjects.push(this.obj4);
   // this.gameObjects.push(this.chair);
-  // this.gameObjects.push(this.coatRack);
+  this.gameObjects.push(this.coatRack);
   // this.gameObjects.push(this.stripes);
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
-  //this.gameObjects.push(this.lamp);
+  this.gameObjects.push(this.lamp);
 
   this.camera = new OrthoCamera();
 
@@ -127,14 +130,19 @@ Scene.prototype.update = function(gl, keysPressed) {
   this.timeAtLastFrame = timeAtThisFrame;
 
   this.blinkingMaterial.dt.set(dt * 100);
-  
+
+  // Press TAB to change selected object
+  if(keysPressed["BACK_QUOTE"]){
+    if(this.selected.length == 1){
+      var nextIndex = (this.selected.pop() + 1) % this.gameObjects.length;
+      this.selected.push(nextIndex);
+    } else{
+      this.selected = [0];
+    }
+  }
   // TODO: if we want movement, make a move method inside gameobjects and pass in keyspressed into gameobject
   // TODO: if we want unique movement
   // how to move the triangles from frame to frame
-  // if(keysPressed.W){
-  //   this.gameObjects[0].position.y += 0.01;
-  //   this.trianglePosition2.y -= 0.01;
-  // }
   // if(keysPressed.A){
   //   this.trianglePosition.x -= 0.01;
   //   this.trianglePosition2.x += 0.01;
@@ -188,10 +196,12 @@ Scene.prototype.update = function(gl, keysPressed) {
 
 
 
-  for (var i=0; i<this.gameObjects.length; i++){
-    this.gameObjects[i].draw(this.camera);
+  // for (var i=0; i<this.gameObjects.length; i++){
+  //   this.gameObjects[i].draw(this.camera);
+  // }
+  for (var j=0; j<this.selected.length; j++){
+    this.gameObjects[this.selected[j]].drawSelected(this.camera, this.yellowMaterial);
   }
-
 };
 
 
