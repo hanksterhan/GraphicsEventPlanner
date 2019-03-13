@@ -36,8 +36,6 @@ const Scene = function(gl) {
   this.blinkingMaterial.solidColor.set(1,0,1);
   this.blinkingMaterial.solidColor2.set(0,1,1);
   this.blinkingMaterial.dt.set(0);
-  // this.blinkingMaterial.timeAtCreation.set(this.timeAtLastFrame);
-  // this.blinkingMaterial.currentTime.set(this.timeAtLastFrame);
   this.blinkingMaterial.blinkSpeed.set(0.5);
   this.blinkingTriangle = new Mesh(this.triangleGeometry, this.blinkingMaterial);
   
