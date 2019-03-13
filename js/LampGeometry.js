@@ -1,15 +1,38 @@
+// Created by George Benz
 "use strict";
-//CREATED BY GEORGE BENZ
-const PlantGeometry = function(gl) {
+const LampGeometry = function(gl) {
   this.gl = gl;
+  this.NUMBER_VERTICES = 360;
+  this.vertices = [0,0,0]; // Center
+  var angle = 0
+  var a = 0.1;
+  var b = 0.1;
+  var l = 0.1;
+  for(var i=0; i<=this.NUMBER_VERTICES; i++){
+      //x
+      var x = (l * Math.cos(angle)) + (a + b * Math.cos(angle)*Math.cos(angle));
+      this.vertices.push(x);
+      //y
+      var y = (a + b*Math.cos(angle)*Math.sin(angle))
+      this.vertices.push(y);
+      //z
+      this.vertices.push(0.5);
+      angle += (2*Math.PI) / this.NUMBER_VERTICES;
+    }
 
-  this.vertices = [0, 0, 0.5];
+  this.colors = [0,0,0]; 
+  for(var i=0; i<=this.NUMBER_VERTICES; i++){
+    this.colors.push(0.5);
+    this.colors.push(0.5);
+    this.colors.push(0.5);
+  }
 
- for (var i = 0; i < 6; i++){
-    this.vertices.push(Math.sin((Math.PI/4)*i));
-    this.vertices.push(Math.cos((Math.PI/4)*i));
-    this.vertices.push(0.5);
-  };
+  this.triplets = []; // vertices of triangles to draw
+  for(var i=1; i<=this.NUMBER_VERTICES; i++){
+    this.triplets.push(i);
+    this.triplets.push(i+1);
+    this.triplets.push(0);
+  }
 
   // allocate and fill vertex buffer in device memory (OpenGL name: array buffer)
   this.vertexBuffer = gl.createBuffer();
@@ -22,26 +45,14 @@ const PlantGeometry = function(gl) {
   this.colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER,
-    new Float32Array([
-       0.9, 2, 0.0,
-       0.1, 0.1, 0.1,
-       0.1, 0.1, 0.1,
-       0.1, 0.1, 0.1,
-       0.1, 0.1, 0.1,
-       0.1, 0.1, 0.1,
-       0.1, 0.1, 0.1,
-      ]),
+    new Float32Array(this.colors),
     gl.STATIC_DRAW);
 
   // allocate and fill index buffer in device memory (OpenGL name: element array buffer)
   this.indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-    new Uint16Array([
-      0, 2, 5,
-      0, 1 ,4,
-      0, 3 ,6,
-    ]),
+    new Uint16Array(this.triplets),
     gl.STATIC_DRAW);
 
   // create and bind input layout with input buffer bindings (OpenGL name: vertex array)
@@ -70,11 +81,11 @@ const PlantGeometry = function(gl) {
   gl.bindVertexArray(null);
 };
 
-PlantGeometry.prototype.draw = function() {
+LampGeometry.prototype.draw = function() {
   const gl = this.gl;
 
   gl.bindVertexArray(this.inputLayout);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);  
 
-  gl.drawElements(gl.TRIANGLES, 9, gl.UNSIGNED_SHORT, 0);
+  gl.drawElements(gl.TRIANGLES, this.NUMBER_VERTICES * 3, gl.UNSIGNED_SHORT, 0);
 };

@@ -9,6 +9,11 @@ const Program = function(gl, vertexShader, fragmentShader) {
   gl.bindAttribLocation(this.glProgram, 0, 'vertexPosition');
   gl.bindAttribLocation(this.glProgram, 1, 'vertexColor');
 
+  gl.enable(gl.BLEND);
+gl.blendFunc(
+  gl.SRC_ALPHA,
+  gl.ONE_MINUS_SRC_ALPHA);
+
   gl.linkProgram(this.glProgram);
   if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {
     throw new Error('Could not link shaders [vertex shader:' + vertexShader.sourceFileName + ']:[fragment shader: ' + fragmentShader.sourceFileName + ']\n' + gl.getProgramInfoLog(this.glProgram));
