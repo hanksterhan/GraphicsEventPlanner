@@ -114,7 +114,7 @@ const Scene = function(gl) {
   // this.gameObjects.push(this.stripes);
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
-  // this.gameObjects.push(this.lamp);
+  //this.gameObjects.push(this.lamp);
 
   this.camera = new OrthoCamera();
 

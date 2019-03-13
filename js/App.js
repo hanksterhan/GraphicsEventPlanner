@@ -26,7 +26,7 @@ App.prototype.resize = function() {
   this.canvas.height = this.canvas.clientHeight;
   this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
-  this.scene.cyanMaterial.setAspectRatio(
+  this.scene.camera.setAspectRatio(
     this.canvas.clientWidth / this.canvas.clientHeight
   );
 };
