@@ -18,6 +18,10 @@ const Scene = function(gl) {
   this.vsStriped = new Shader(gl, gl.VERTEX_SHADER, "striped_vs.essl");
   this.fsStriped = new Shader(gl, gl.FRAGMENT_SHADER, "striped_fs.essl");
   this.stripedProgram = new Program(gl, this.vsStriped, this.fsStriped);
+
+  this.vsBullseye = new Shader(gl, gl.VERTEX_SHADER, "bullseye_vs.essl");
+  this.fsBullseye = new Shader(gl, gl.FRAGMENT_SHADER, "bullseye_fs.essl");
+  this.bullseyeProgram = new Program(gl, this.vsBullseye, this.fsBullseye);
   
   this.fsBlink = new Shader(gl, gl.FRAGMENT_SHADER, "blinking_fs.essl");
   this.blinkProgram = new Program(gl, this.vsIdle, this.fsBlink);
@@ -51,6 +55,18 @@ const Scene = function(gl) {
   this.yellowStripedMaterial.stripeWidth.set(0.8);
   this.yellowStripedCircle = new Mesh(this.circleGeometry, this.yellowStripedMaterial);
 
+  this.pinkBullseyeMaterial = new Material(gl, this.bullseyeProgram);
+  this.pinkBullseyeMaterial.stripeColor1.set(0.043, 0.925, 0.976,1);
+  this.pinkBullseyeMaterial.stripeColor2.set(0.976, 0.043, 0.862, 1);
+  this.pinkBullseyeMaterial.stripeWidth.set(0.05);
+  this.pinkBullseyeTriangle = new Mesh(this.triangleGeometry, this.pinkBullseyeMaterial);
+
+  this.yellowBullseyeMaterial = new Material(gl, this.bullseyeProgram);
+  this.yellowBullseyeMaterial.stripeColor1.set(.9,0,.1,1);
+  this.yellowBullseyeMaterial.stripeColor2.set(0.9,1,0.3,1);
+  this.yellowBullseyeMaterial.stripeWidth.set(0.01);
+  this.yellowBullseyeCircle = new Mesh(this.circleGeometry, this.yellowBullseyeMaterial);
+
   this.yellowMaterial = new Material(gl, this.solidProgram);
   this.yellowMaterial.solidColor.set(0,0.5,0.8);
 
@@ -69,7 +85,7 @@ const Scene = function(gl) {
   this.gameObjects = [];
 
   this.asteroid.position.set({x:0.3, y:0, z:0});
-  this.gameObjects.push(this.asteroid);
+  // this.gameObjects.push(this.asteroid);
 
   
   this.obj1 = new GameObject(this.yellowTriangle);
@@ -93,6 +109,12 @@ const Scene = function(gl) {
   this.stripes2 = new GameObject(this.yellowStripedCircle);
   this.stripes2.position.set({x:0, y:0, z:0});
 
+  this.bullseye = new GameObject(this.pinkBullseyeTriangle);
+  this.bullseye.position.set({x:1, y:0, z:0});
+
+  this.bullseye2 = new GameObject(this.yellowBullseyeCircle);
+  this.bullseye2.position.set({x:-1, y:0, z:0});
+
   this.coatRack = new GameObject(this.cyanCoatRack);
   this.coatRack.position.set({x:0, y:0, z:0});
 
@@ -113,7 +135,9 @@ const Scene = function(gl) {
   // this.gameObjects.push(this.stripes);
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
-  //this.gameObjects.push(this.lamp);
+  // this.gameObjects.push(this.lamp);
+  this.gameObjects.push(this.bullseye);
+  this.gameObjects.push(this.bullseye2);
 
   this.camera = new OrthoCamera();
 
