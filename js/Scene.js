@@ -207,8 +207,18 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.gameObjects.push(this.lamp2);
   }
 
+  // Press IJKL to move the camera around
   if(keysPressed.I){
-    
+    this.camera.position.y += 0.05;
+  }
+  if(keysPressed.J){
+    this.camera.position.x -= 0.05;
+  }
+  if(keysPressed.K){
+    this.camera.position.y -= 0.05;
+  }
+  if(keysPressed.L){
+    this.camera.position.x += 0.05;
   }
 
   // clear the screen
@@ -222,7 +232,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
 
   
   // this.camera.position.set(this.gameObjects[0].position);
-  // this.camera.updateViewProjMatrix();
+  this.camera.updateViewProjMatrix();
 
   for (var i=0; i<this.gameObjects.length; i++){
     this.gameObjects[i].draw(this.camera);
