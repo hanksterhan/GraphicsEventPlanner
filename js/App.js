@@ -34,6 +34,7 @@ App.prototype.resize = function() {
 
 App.prototype.registerEventHandlers = function() {
   document.onkeydown = (event) => {
+    // WASD to move selected objects
     if(keyboardMap[event.keyCode] === "W"){
       this.keysPressed.W = 1;
     }
@@ -46,9 +47,12 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "D"){
       this.keysPressed.D = 1;
     }
+    // in replacement of tab, use backquote because Henry's tab up isn't detected
+    // back quote for selecting highlighted
     if(keyboardMap[event.keyCode] === "BACK_QUOTE"){
       this.keysPressed["BACK_QUOTE"] = 1;
     }
+    // if PTCHRE are held down and the mouse is clicked, an object will appear at the position of the mouse click
     if(keyboardMap[event.keyCode] === "P"){
       this.keysPressed.P = 1;
     }
@@ -67,9 +71,24 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "E"){
       this.keysPressed.E = 1;
     }
+    // DELETE to delete highlighted objects
     if(keyboardMap[event.keyCode] === "DELETE"){
       this.keysPressed["DELETE"] = 1;
     }
+    // IJKL to scroll with the camera
+    if(keyboardMap[event.keyCode] === "I"){
+      this.keysPressed.I = 1;
+    }
+    if(keyboardMap[event.keyCode] === "J"){
+      this.keysPressed.J = 1;
+    }
+    if(keyboardMap[event.keyCode] === "K"){
+      this.keysPressed.K = 1;
+    }
+    if(keyboardMap[event.keyCode] === "L"){
+      this.keysPressed.L = 1;
+    }
+    
   };
   document.onkeyup = (event) => {
     if(keyboardMap[event.keyCode] === "W"){
@@ -108,19 +127,26 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "DELETE"){
       this.keysPressed["DELETE"] = 0;
     }
+    // IJKL to scroll with the camera
+    if(keyboardMap[event.keyCode] === "I"){
+      this.keysPressed.I = 0;
+    }
+    if(keyboardMap[event.keyCode] === "J"){
+      this.keysPressed.J = 0;
+    }
+    if(keyboardMap[event.keyCode] === "K"){
+      this.keysPressed.K = 0;
+    }
+    if(keyboardMap[event.keyCode] === "L"){
+      this.keysPressed.L = 0;
+    }
     console.log(event.keyCode);
   };
   this.canvas.onmousedown = (event) => {
-    // TODO: Aspect ratio is tweaking everything
     // calculate and scale the mouse clicks so that they are where the computer thinks they are
     this.mousePressed.Down = 1;
-    this.originX = this.canvas.width / 2;
-    this.originY = this.canvas.height / 2;
-    this.windowX = this.canvas.width / 176.5;
-    this.windowY = this.canvas.height / 176.5;
-    this.mousePressed.X =  this.windowX * ((event.x - this.originX) / this.canvas.width); // need to tweak this
-    this.mousePressed.Y = -1 * this.windowY * ((event.y - this.originY) / this.canvas.height); // need to tweak this
-    //jshint unused:false
+    this.mousePressed.X = 2*((event.clientX / this.canvas.width) - 0.5);
+    this.mousePressed.Y = -2*((event.clientY / this.canvas.height) - 0.5);
   };
   this.canvas.onmousemove = (event) => {
     //jshint unused:false

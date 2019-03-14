@@ -25,7 +25,6 @@ GameObject.prototype.draw = function(camera) {
 
 GameObject.prototype.drawSelected = function(camera, material) {
     this.updateModelMatrix();
-    this.mesh.material.modelViewProjMatrix.set(this.modelMatrix).mul(camera.viewProjMatrix);
-
+    material.modelViewProjMatrix.set(this.modelMatrix).mul(camera.viewProjMatrix);
     this.mesh.drawSelected(material);
 };
