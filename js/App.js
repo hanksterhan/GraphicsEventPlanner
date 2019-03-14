@@ -149,18 +149,14 @@ App.prototype.registerEventHandlers = function() {
     this.mousePressed.Y = -2*((event.clientY / this.canvas.height) - 0.5);
     this.mousePressed.PreviousX = event.clientX;
     this.mousePressed.PreviousY = event.clientY;
-    console.log(this.mousePressed.X);
-    console.log(this.mousePressed.Y);
   };
   this.canvas.onmousemove = (event) => {
     event.stopPropagation();
     if (this.mousePressed.Down){
       this.mousePressed.Move = 1;
 
-      this.mousePressed.dx = 2*(((event.clientX - this.mousePressed.PreviousX) / this.canvas.width) -0.5);
-      this.mousePressed.dy = -2*(((event.clientY - this.mousePressed.PreviousY) / this.canvas.height) -0.5);
-      // console.log("movment in x: ", this.mousePressed.dx);
-      // console.log("movement in y: ", this.mousePressed.dy);
+      this.mousePressed.dx = 2*(((event.clientX - this.mousePressed.PreviousX) / this.canvas.width));
+      this.mousePressed.dy = -2*(((event.clientY - this.mousePressed.PreviousY) / this.canvas.height));
       this.mousePressed.PreviousX = event.clientX;
       this.mousePressed.PreviousY = event.clientY;
     }
@@ -169,7 +165,6 @@ App.prototype.registerEventHandlers = function() {
     //jshint unused:false
   };
   this.canvas.onmouseup = (event) => {
-    //jshint unused:false
     this.mousePressed.Down = 0;
     this.mousePressed.Move = 1;
     this.mousePressed.finalX = 2*((event.clientX / this.canvas.width) - 0.5);
