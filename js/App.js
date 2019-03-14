@@ -147,10 +147,23 @@ App.prototype.registerEventHandlers = function() {
     this.mousePressed.Down = 1;
     this.mousePressed.X = 2*((event.clientX / this.canvas.width) - 0.5);
     this.mousePressed.Y = -2*((event.clientY / this.canvas.height) - 0.5);
+    this.mousePressed.PreviousX = event.clientX;
+    this.mousePressed.PreviousY = event.clientY;
+    console.log(this.mousePressed.X);
+    console.log(this.mousePressed.Y);
   };
   this.canvas.onmousemove = (event) => {
-    //jshint unused:false
     event.stopPropagation();
+    if (this.mousePressed.Down){
+      this.mousePressed.Move = 1;
+
+      this.mousePressed.dx = 2*(((event.clientX - this.mousePressed.PreviousX) / this.canvas.width) -0.5);
+      this.mousePressed.dy = -2*(((event.clientY - this.mousePressed.PreviousY) / this.canvas.height) -0.5);
+      // console.log("movment in x: ", this.mousePressed.dx);
+      // console.log("movement in y: ", this.mousePressed.dy);
+      this.mousePressed.PreviousX = event.clientX;
+      this.mousePressed.PreviousY = event.clientY;
+    }
   };
   this.canvas.onmouseout = (event) => {
     //jshint unused:false
@@ -158,6 +171,9 @@ App.prototype.registerEventHandlers = function() {
   this.canvas.onmouseup = (event) => {
     //jshint unused:false
     this.mousePressed.Down = 0;
+    this.mousePressed.Move = 1;
+    this.mousePressed.finalX = 2*((event.clientX / this.canvas.width) - 0.5);
+    this.mousePressed.finalY = -2*((event.clientY / this.canvas.height) - 0.5);
   };
   window.addEventListener('resize', () => this.resize() );
   window.requestAnimationFrame( () => this.update() );

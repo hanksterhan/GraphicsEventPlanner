@@ -87,7 +87,6 @@ const Scene = function(gl) {
   // this.cyanBeanBag = new Mesh(this.beanBagGeometry, this.cyanMaterial);
 
   this.selected = []; // contains indices of the objects that are selected
-  this.nextSelectedIndex = 0; // index of the next object to be selected by TAB
 
   this.gameObjects = [];
 
@@ -218,7 +217,36 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.camera.position.y -= 0.05;
   }
   if(keysPressed.L){
-    this.camera.position.x += 0.05;
+    // this.camera.position.x += 0.05;
+    this.gameObjects[0].orientation += 0.1;
+  }
+
+  // mouse drag selected objects if mouse is down and moving
+  if(mousePressed.Down && mousePressed.Move){
+    var ratio = this.camera.windowSize.storage[0] / this.camera.windowSize.storage[1];
+    var dx = (mousePressed.dx * this.camera.windowSize.storage[0]) / (50*ratio);
+    var dy = (mousePressed.dy * this.camera.windowSize.storage[1]) / (50);
+    for(var i=0; i<this.selected.length; i++){
+      console.log("movement in x: ", dx);
+      console.log("movement in y: ", dy);
+      this.gameObjects[this.selected[i]].position.x += dx;
+      this.gameObjects[this.selected[i]].position.y += dy;
+    }
+  }
+
+  // mouse rotate selected objects if mouse is down and moving
+  if(!mousePressed.Down && mousePressed.Move){
+    var x_0 = (mousePressed.X * this.camera.windowSize.storage[0]);
+    var y_0 = (mousePressed.Y * this.camera.windowSize.storage[1]);
+    var x_1 = (mousePressed.finalX * this.camera.windowSize.storage[0]);
+    var y_1 = (mousePressed.finalY * this.camera.windowSize.storage[1]);
+    for(var i=0; i<this.selected.length; i++){
+      // console.log("movement in x: ", dx);
+      // console.log("movement in y: ", dy);
+      var angle_0 = Math.atan(Math.abs(this.gameObjects[this.selected[0]].position.y - y_0), Math.abs(this.gameObjects[this.selected[0]].position.x - x_0));
+      var angle_1 = Math.atan(Math.abs(this.gameObjects[this.selected[0]].position.y - y_1), Math.abs(this.gameObjects[this.selected[0]].position.x - x_1));
+      this.gameObjects[this.selected[i]].orientation = angle_1 - angle_0;
+    }
   }
 
   // clear the screen
