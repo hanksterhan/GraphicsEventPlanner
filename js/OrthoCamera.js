@@ -9,7 +9,7 @@ const OrthoCamera = function() {
 
 OrthoCamera.prototype.updateViewProjMatrix = function() {
     this.viewProjMatrix.set()
-    .scale(0.5)
+    .scale()
     .scale(this.windowSize)
     .rotate(this.rotation)
     .translate(this.position)

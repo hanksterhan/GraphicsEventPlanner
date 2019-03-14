@@ -33,6 +33,7 @@ const Scene = function(gl) {
   this.coatRackGeometry = new CoatRackGeometry(gl);
   this.plantGeometry = new PlantGeometry(gl);
   this.lampGeometry = new LampGeometry(gl);
+  // this.beanBagGeometry = new BeanBagGeometry(gl);
   
   this.timeAtLastFrame = new Date().getTime();
 
@@ -68,7 +69,7 @@ const Scene = function(gl) {
   this.yellowBullseyeCircle = new Mesh(this.circleGeometry, this.yellowBullseyeMaterial);
 
   this.yellowMaterial = new Material(gl, this.solidProgram);
-  this.yellowMaterial.solidColor.set(0,0.5,0.8);
+  this.yellowMaterial.solidColor.set(1,1,0);
 
   this.cyanMaterial = new Material(gl, this.solidProgram);
   this.cyanMaterial.solidColor.set(0,1,1);
@@ -76,11 +77,14 @@ const Scene = function(gl) {
   this.yellowTriangle = new Mesh(this.triangleGeometry, this.yellowMaterial);
   this.cyanTriangle = new Mesh(this.triangleGeometry, this.cyanMaterial);
   this.yellowQuad = new Mesh(this.quadGeometry, this.yellowMaterial);
-  this.cyanCircle = new Mesh(this.circleGeometry, this.cyanMaterial);
+  this.cyanTable = new Mesh(this.circleGeometry, this.cyanMaterial);
+  this.cyanChair = new Mesh(this.chairGeometry, this.cyanMaterial);
   this.yellowChair = new Mesh(this.chairGeometry, this.yellowMaterial);
   this.cyanCoatRack= new Mesh(this.coatRackGeometry, this.cyanMaterial);
   this.cyanPlant = new Mesh(this.plantGeometry, this.cyanMaterial);
+  this.cyanLamp = new Mesh(this.plantGeometry, this.cyanMaterial);
   this.yellowLamp = new Mesh(this.lampGeometry, this.yellowMaterial);
+  // this.cyanBeanBag = new Mesh(this.beanBagGeometry, this.cyanMaterial);
 
   this.selected = []; // contains indices of the objects that are selected
   this.nextSelectedIndex = 0; // index of the next object to be selected by TAB
@@ -91,17 +95,14 @@ const Scene = function(gl) {
   // this.gameObjects.push(this.asteroid);
 
   
-  this.obj1 = new GameObject(this.yellowTriangle);
-  this.obj1.position.set({x:-1, y:0, z:0});
-
   this.obj2 = new GameObject(this.cyanTriangle);
   this.obj2.position.set({x:0.3, y:0, z:0});
 
-  this.obj3 = new GameObject(this.yellowQuad);
-  this.obj3.position.set({x:0.3, y:0.3, z:0});
+  // this.obj3 = new GameObject(this.yellowQuad);
+  // this.obj3.position.set({x:0.3, y:0.3, z:0});
 
-  this.obj4 = new GameObject(this.cyanCircle);
-  this.obj4.position.set({x:0.3, y:-0.3, z:0});
+  this.obj4 = new GameObject(this.cyanTable);
+  this.obj4.position.set({x:2, y:0, z:0});
 
   this.chair = new GameObject(this.yellowChair);
   this.chair.position.set({x:-0.3, y:-0.3, z:0});
@@ -119,7 +120,7 @@ const Scene = function(gl) {
   this.bullseye2.position.set({x:-1, y:0, z:0});
 
   this.coatRack = new GameObject(this.cyanCoatRack);
-  this.coatRack.position.set({x:0, y:0, z:0});
+  this.coatRack.position.set({x:-2, y:0, z:0});
 
   this.blink = new GameObject(this.blinkingTriangle);
   this.blink.position.set({x:0, y:0, z:0});
@@ -129,22 +130,20 @@ const Scene = function(gl) {
 
   this.lamp = new GameObject(this.yellowLamp);
   this.lamp.position.set({x:0, y:0, z:0});
-  this.gameObjects.push(this.obj1);
-  //this.gameObjects.push(this.obj2);
+  this.gameObjects.push(this.obj2);
   // this.gameObjects.push(this.obj3);
-  // this.gameObjects.push(this.obj4);
+  this.gameObjects.push(this.obj4);
   // this.gameObjects.push(this.chair);
   this.gameObjects.push(this.coatRack);
   // this.gameObjects.push(this.stripes);
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
-  this.gameObjects.push(this.lamp);
+  // this.gameObjects.push(this.lamp);
 
   this.camera = new OrthoCamera();
-
 };
 
-Scene.prototype.update = function(gl, keysPressed) {
+Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   //jshint bitwise:false
   //jshint unused:false
   const timeAtThisFrame = new Date().getTime();
@@ -162,67 +161,76 @@ Scene.prototype.update = function(gl, keysPressed) {
       this.selected = [0];
     }
   }
-  // TODO: if we want movement, make a move method inside gameobjects and pass in keyspressed into gameobject
-  // TODO: if we want unique movement
-  // how to move the triangles from frame to frame
-  // if(keysPressed.A){
-  //   this.trianglePosition.x -= 0.01;
-  //   this.trianglePosition2.x += 0.01;
+
+  // TODO: almost works, indexing is off i believe
+  // Press DELETE to delete selected objects
+  if(keysPressed["DELETE"]){
+    for(var i=this.selected.length-1; i>=0; i--){
+      this.gameObjects.splice(i, 1);
+    }
+    this.selected = [];
+  }
+
+  // If mouse clicked and p is pressed, draw a plant where the mouse is clicked:
+  if(mousePressed.Down && keysPressed.P){
+    this.plant2 = new GameObject(this.cyanPlant);
+    this.plant2.position.set({x:mousePressed.X, y:mousePressed.Y, z:0});
+    this.gameObjects.push(this.plant2);
+  }
+  // If mouse clicked and t is pressed, draw a table where the mouse is clicked:
+  if(mousePressed.Down && keysPressed.T){
+    this.table2 = new GameObject(this.cyanTable);
+    this.table2.position.set({x:mousePressed.X, y:mousePressed.Y, z:0});
+    this.gameObjects.push(this.table2);
+  }
+  // If mouse clicked and c is pressed, draw a chair where the mouse is clicked:
+  if(mousePressed.Down && keysPressed.C){
+    this.chair2 = new GameObject(this.cyanChair);
+    this.chair2.position.set({x:mousePressed.X, y:mousePressed.Y, z:0});
+    this.gameObjects.push(this.chair2);
+  }
+  // If mouse clicked and h is pressed, draw a bean bag where the mouse is clicked:
+  // if(mousePressed.Down && keysPressed.H){
+  //   this.beanBag2 = new GameObject(this.cyanBeanBag);
+  //   this.beanBag2.position.set({x:mousePressed.X, y:mousePressed.Y, z:0});
+  //   this.gameObjects.push(this.beanBag2);
   // }
-  // if(keysPressed.S){
-  //   this.trianglePosition.y -= 0.01;
-  //   this.trianglePosition2.y += 0.01;
-  // }
-  // if(keysPressed.D){
-  //   this.trianglePosition.x += 0.01;
-  //   this.trianglePosition2.x -= 0.01;
-  // }
+  // If mouse clicked and r is pressed, draw a coat rack where the mouse is clicked:
+  if(mousePressed.Down && keysPressed.R){
+    this.coatRack2 = new GameObject(this.cyanCoatRack);
+    this.coatRack2.position.set({x:mousePressed.X, y:mousePressed.Y, z:0});
+    this.gameObjects.push(this.coatRack2);
+  }
+  // If mouse clicked and r is pressed, draw a coat rack where the mouse is clicked:
+  if(mousePressed.Down && keysPressed.E){
+    this.lamp2 = new GameObject(this.cyanLamp);
+    this.lamp2.position.set({x:mousePressed.X, y:mousePressed.Y, z:0});
+    this.gameObjects.push(this.lamp2);
+  }
 
   // clear the screen
-  gl.clearColor(0.2, 0.3, 0.9, 1);
+  gl.clearColor(0.2, 0.3, 0.4, 1);
   gl.clearDepth(1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-  // const modelMatrixUniformLocation = gl.getUniformLocation(
-  //   this.solidProgram.glProram, "modelMatrix");
-  // if (modelMatrixUniformLocation == null) {
-  //   console.log("Could not find uniform modelMatrix.");
-  // } else {
-  //   const modelMatrix = new Mat4().translate(this.trianglePosition);
-  //   modelMatrix.commit(gl, modelMatrixUniformLocation);
-  // }
-
   const materialMatrix = new Mat4().translate(this.trianglePosition);
   const materialMatrix2 = new Mat4().translate(this.trianglePosition2);
 
-  // To set up a Material object and draw them
-  // this.cyanMaterial.modelMatrix.set(materialMatrix);
-  // this.cyanMaterial.commit();
-  // this.triangleGeometry.draw()
-
-  // this.yellowMaterial.modelMatrix.set(materialMatrix2);
-  // this.yellowMaterial.commit();
-  // this.triangleGeometry.draw();
-
-  // To set up a Mesh object and draw them
-  // this.yellowTriangle.material.modelMatrix.set(materialMatrix);
-  // this.yellowTriangle.draw();
-
-  // this.cyanTriangle.material.modelMatrix.set(materialMatrix2);
-  // this.cyanTriangle.draw();
   
   // this.camera.position.set(this.gameObjects[0].position);
   // this.camera.updateViewProjMatrix();
 
-
-
-
-  // for (var i=0; i<this.gameObjects.length; i++){
-  //   this.gameObjects[i].draw(this.camera);
-  // }
-  for (var j=0; j<this.selected.length; j++){
+  for (var i=0; i<this.gameObjects.length; i++){
+    this.gameObjects[i].draw(this.camera);
+  }
+  // for (var j=0; j<this.selected.length; j++){
+  var j = 0
+  while(this.selected.length != 0 && j < this.selected.length){
+    console.log("number of selected items: ", this.selected.length);
     this.gameObjects[this.selected[j]].drawSelected(this.camera, this.yellowMaterial);
+    j+=1;
+    console.log(j);
   }
 };
 
