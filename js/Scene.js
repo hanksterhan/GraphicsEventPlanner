@@ -282,9 +282,9 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     for(var z = 0; z < this.gameObjects.length; z++){
       if(mousePressed.X*this.camera.windowSize.storage[0] <= this.gameObjects[z].position.x + .15 && mousePressed.X*this.camera.windowSize.storage[0] >= this.gameObjects[z].position.x - .15){
         if(mousePressed.Y*this.camera.windowSize.storage[1] <= this.gameObjects[z].position.y + .15 && mousePressed.Y*this.camera.windowSize.storage[1] >= this.gameObjects[z].position.y - .15){
-          console.log("before: ", this.selected.length)
-          this.selected.push(this.gameObjects[z]);
-          console.log("after: ", this.selected.length)
+          // this.selected.push(z);
+          this.selected = [];
+          this.selected.push(z);
         }
       }
     }
@@ -337,13 +337,11 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.camera.position.x += 0.05;
   }
   if(keysPressed.A){
-    console.log(this.selected)
     for(var i=0; i<this.selected.length; i++){
       this.gameObjects[this.selected[i]].orientation += 0.1;
     }
   }
   if(keysPressed.D){
-    console.log(this.selected)
     for(var i=0; i<this.selected.length; i++){
       this.gameObjects[this.selected[i]].orientation -= 0.1;
     }
@@ -389,6 +387,29 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
       var angle_1 = Math.atan(Math.abs(this.gameObjects[this.selected[0]].position.y - y_1), Math.abs(this.gameObjects[this.selected[0]].position.x - x_1));
       this.gameObjects[this.selected[i]].orientation = angle_1 - angle_0;
     }
+  }
+
+  // PAN 
+  if(mousePressed.Down && mousePressed.Move && this.selected.length == 0){
+    var ratio = this.camera.windowSize.storage[0] / this.camera.windowSize.storage[1];
+    console.log("ratio: ", ratio)
+    var x_0 = (mousePressed.X * this.camera.windowSize.storage[0] / ratio);
+    console.log("x_0: ", x_0)
+    var y_0 = (mousePressed.Y * this.camera.windowSize.storage[1]);
+    console.log("y_0: ", y_0)
+    var x_1 = (mousePressed.finalX * this.camera.windowSize.storage[0]); 
+    console.log("x_1: ", x_1)
+    var y_1 = (mousePressed.finalY * this.camera.windowSize.storage[1]);
+    console.log("y_1: ", y_1)
+    var horizontal = x_1 - x_0;
+    if (isNaN(horizontal)) horizontal = 0;
+    var vertical = y_1 - y_0;
+    if (isNaN(vertical)) vertical = 0;
+    console.log("horizontal: ", horizontal)
+    console.log("vertical: ", vertical)
+
+    this.camera.position.x += horizontal;
+    this.camera.position.y += vertical;
   }
 
   // clear the screen
