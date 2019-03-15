@@ -167,12 +167,12 @@ const Scene = function(gl) {
 
   //this.gameObjects.push(this.checker);
 
-  this.gameObjects.push(this.wave);
-  //this.gameObjects.push(this.obj2);
+  // this.gameObjects.push(this.wave);
+  this.gameObjects.push(this.obj2);
   // this.gameObjects.push(this.obj3);
- // this.gameObjects.push(this.obj4);
+ this.gameObjects.push(this.obj4);
   // this.gameObjects.push(this.chair);
-  //this.gameObjects.push(this.coatRack);
+  this.gameObjects.push(this.coatRack);
   // this.gameObjects.push(this.stripes);
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
@@ -193,7 +193,6 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
 
-  this.blinkingMaterial.dt.set(dt * 100);
   if (wavet > 1.5){
     this.wavingMaterial.translationMatrix.set(this.wavingMaterial.translationMatrix.translate(new Vec3(0.005, 0, 0)));
   } else{
@@ -306,6 +305,13 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   }
   if(keysPressed.L){
     this.camera.position.x += 0.05;
+  }
+  if(keysPressed.A){
+    console.log(selected)
+    for(var i=0; i<this.selected.length; i++){
+      console.log(selected[i])
+      this.selected[i].orientation += 0.1;
+    }
   }
 
   // mouse drag selected objects if mouse is down and moving
