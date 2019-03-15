@@ -184,6 +184,7 @@ const Scene = function(gl) {
 
   this.camera = new OrthoCamera();
 
+//DROP DOWN GEORGE BENZ
   document.addEventListener('click', function(e) {
     e = e || window.event;
     var target = e.target || e.srcElement,
@@ -231,6 +232,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.selected = [];
   }
 
+  //MOVE OBJECTS GEORGE BENZ
   if(keysPressed["LEFT"]){
     for(var i=this.selected.length-1; i>=0; i--){
       this.gameObjects[this.selected[i]].position.x -= 0.01;
@@ -342,7 +344,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     }
   }
 
-  // Zooming in and out
+  // Zooming in and out GEORGE BENZ
   if(keysPressed.Z){
     this.camera.windowSize.y -= 0.05;
     this.camera.windowSize.x -= 0.05;
@@ -395,6 +397,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   for (var i=0; i<this.gameObjects.length; i++){
     this.gameObjects[i].draw(this.camera);
   }
+  //DUPLICATE GEORGE BENZ
   if(keysPressed["SPACE"]){
     for (var i =0; i <this.selected.length; i++){
       this.temp = new GameObject(this.gameObjects[this.selected[i]].mesh);

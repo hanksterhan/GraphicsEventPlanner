@@ -5,7 +5,7 @@ Shader.source[document.currentScript.src.split('js/shaders/')[1]] = `#version 30
   
   in vec4 position;
   in vec4 color; // received from VS via RS
-
+  //GEORGE BENZ
   // uniforms for stipped properties:
   uniform vec4 boxColor1; 
   uniform vec4 boxColor2; 
