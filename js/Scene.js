@@ -307,10 +307,15 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.camera.position.x += 0.05;
   }
   if(keysPressed.A){
-    console.log(selected)
+    console.log(this.selected)
     for(var i=0; i<this.selected.length; i++){
-      console.log(selected[i])
-      this.selected[i].orientation += 0.1;
+      this.gameObjects[this.selected[i]].orientation += 0.1;
+    }
+  }
+  if(keysPressed.D){
+    console.log(this.selected)
+    for(var i=0; i<this.selected.length; i++){
+      this.gameObjects[this.selected[i]].orientation -= 0.1;
     }
   }
 
