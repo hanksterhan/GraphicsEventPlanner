@@ -12,13 +12,15 @@ Shader.source[document.currentScript.src.split('js/shaders/')[1]] = `#version 30
   uniform float boxWidth;
 
   void main(void) {
-    if (mod(position[0], boxWidth) < boxWidth/2.0){
+    if (mod(position[1], boxWidth) > boxWidth/2.0){
         fragmentColor = boxColor1; 
     } else{
         fragmentColor = boxColor2;
     }
-    if (mod(position[1], boxWidth) < boxWidth/2.0){
-        fragmentColor = boxColor1; 
+    if (mod(position[0], boxWidth) > boxWidth/2.0){
+        fragmentColor = boxColor2; 
     } 
+
+
   }
 `;
