@@ -30,8 +30,13 @@ const Scene = function(gl) {
   this.fsBlink = new Shader(gl, gl.FRAGMENT_SHADER, "blinking_fs.essl");
   this.blinkProgram = new Program(gl, this.vsIdle, this.fsBlink);
 
+<<<<<<< Updated upstream
   this.vsWave = new Shader(gl, gl.VERTEX_SHADER, "waving_vs.essl");
   this.waveProgram = new Program(gl, this.vsWave, this.fsSolid);
+=======
+  this.fsHeartbeat = new Shader(gl, gl.FRAGMENT_SHADER, "heartbeat_fs.essl");
+  this.heartbeatProgram = new Program(gl, this.vsIdle, this.fsHeartbeat);
+>>>>>>> Stashed changes
 
   this.triangleGeometry = new TriangleGeometry(gl);
   this.quadGeometry = new QuadGeometry(gl);
@@ -53,9 +58,13 @@ const Scene = function(gl) {
   this.blinkingMaterial = new Material(gl, this.blinkProgram);
   this.blinkingMaterial.solidColor.set(1,0,1);
   this.blinkingMaterial.solidColor2.set(0,1,1);
-  this.blinkingMaterial.dt.set(0);
-  this.blinkingMaterial.blinkSpeed.set(0.5);
   this.blinkingTriangle = new Mesh(this.triangleGeometry, this.blinkingMaterial);
+
+  this.heartbeatMaterial = new Material(gl, this.heartbeatProgram);
+  this.heartbeatMaterial.solidColor.set(0.960, 0, 0.164);
+  this.heartbeatMaterial.solidColor2.set(0.572, 0, 0.960);
+  this.heartbeatTriangle = new Mesh(this.triangleGeometry, this.heartbeatMaterial);
+  this.initialTime = new Date().getTime();
   
   this.pinkStripedMaterial = new Material(gl, this.stripedProgram);
   this.pinkStripedMaterial.stripeColor1.set(1,0,1,1);
@@ -146,6 +155,9 @@ const Scene = function(gl) {
   this.blink = new GameObject(this.blinkingTriangle);
   this.blink.position.set({x:0, y:0, z:0});
 
+  this.heartbeat = new GameObject(this.heartbeatTriangle);
+  this.heartbeat.position.set({x:-.5, y:-.5, z:0});
+
   this.plant = new GameObject(this.cyanPlant);
   this.plant.position.set({x:0, y:0, z:0});
 
@@ -166,6 +178,10 @@ const Scene = function(gl) {
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
   // this.gameObjects.push(this.lamp);
+  // this.gameObjects.push(this.bullseye);
+  // this.gameObjects.push(this.bullseye2);
+  // this.gameObjects.push(this.heartbeat);
+
 
   this.camera = new OrthoCamera();
 };
@@ -184,7 +200,13 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   } else{
     this.wavingMaterial.translationMatrix.set(this.wavingMaterial.translationMatrix.translate(new Vec3(-0.005, 0, 0)));
   }
-  
+
+  var timeNow = new Date().getTime();
+  var timeDiff = timeNow - this.initialTime;
+  var sin = Math.sin(timeDiff);
+
+  this.blinkingMaterial.sinVal.set(sin);
+  this.heartbeatMaterial.timeDiff.set(timeDiff);
 
   // Press TAB to change selected object
   if(keysPressed["BACK_QUOTE"]){
@@ -227,6 +249,38 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   //   this.beanBag2 = new GameObject(this.cyanBeanBag);
   //   this.beanBag2.position.set({x:mousePressed.X*this.camera.windowSize.storage[0], y:mousePressed.Y*this.camera.windowSize.storage[1], z:0});
   //   this.gameObjects.push(this.beanBag2);
+
+  if(mousePressed.Down){
+    for(var z = 0; z < this.gameObjects.length; z++){
+      if(mousePressed.X*this.camera.windowSize.storage[0] <= this.gameObjects[z].position.x + .15 && mousePressed.X*this.camera.windowSize.storage[0] >= this.gameObjects[z].position.x - .15){
+        if(mousePressed.Y*this.camera.windowSize.storage[1] <= this.gameObjects[z].position.y + .15 && mousePressed.Y*this.camera.windowSize.storage[1] >= this.gameObjects[z].position.y - .15){
+          console.log("before: ", this.selected.length)
+          this.selected.push(this.gameObjects[z]);
+          console.log("after: ", this.selected.length)
+        }
+      }
+    }
+  }
+  
+  // TODO: if we want movement, make a move method inside gameobjects and pass in keyspressed into gameobject
+  // TODO: if we want unique movement
+  // how to move the triangles from frame to frame
+  // if(keysPressed.W){
+  //   this.gameObjects[0].position.y += 0.01;
+  //   this.trianglePosition2.y -= 0.01;
+  // }
+  // if(keysPressed.A){
+  //   this.trianglePosition.x -= 0.01;
+  //   this.trianglePosition2.x += 0.01;
+  // }
+  // if(keysPressed.S){
+  //   this.trianglePosition.y -= 0.01;
+  //   this.trianglePosition2.y += 0.01;
+  // }
+  // if(keysPressed.D){
+  //   this.trianglePosition.x += 0.01;
+  //   this.trianglePosition2.x -= 0.01;
+
   // }
   // If mouse clicked and r is pressed, draw a coat rack where the mouse is clicked:
   if(mousePressed.Down && keysPressed.R){

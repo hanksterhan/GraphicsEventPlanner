@@ -88,7 +88,14 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "L"){
       this.keysPressed.L = 1;
     }
-    
+    // Z for ZOOM
+    if(keyboardMap[event.keyCode] === "Z"){
+      this.keysPressed.Z = 1;
+    }
+    // X for unZOOM
+    if(keyboardMap[event.keyCode] === "X"){
+      this.keysPressed.X = 1;
+    }
   };
   document.onkeyup = (event) => {
     if(keyboardMap[event.keyCode] === "W"){
