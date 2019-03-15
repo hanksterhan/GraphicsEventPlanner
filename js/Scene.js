@@ -237,12 +237,12 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     var ratio = this.camera.windowSize.storage[0] / this.camera.windowSize.storage[1];
     var x_0 = (mousePressed.X * this.camera.windowSize.storage[0] / ratio);
     var y_0 = (mousePressed.Y * this.camera.windowSize.storage[1]);
-    var x_1 = (mousePressed.finalX * this.camera.windowSize.storage[0]); 
-    var y_1 = (mousePressed.finalY * this.camera.windowSize.storage[1]);
+    var dx = (mousePressed.dx * this.camera.windowSize.storage[0]) / (ratio);
+    var dy = (mousePressed.dy * this.camera.windowSize.storage[1]);
     // loop over selected objects and calculate the angle of rotation based on the first highlighted object
     for(var i=0; i<this.selected.length; i++){
       var angle_0 = Math.atan(Math.abs(this.gameObjects[this.selected[0]].position.y - y_0), Math.abs(this.gameObjects[this.selected[0]].position.x - x_0));
-      var angle_1 = Math.atan(Math.abs(this.gameObjects[this.selected[0]].position.y - y_1), Math.abs(this.gameObjects[this.selected[0]].position.x - x_1));
+      var angle_1 = Math.atan(Math.abs(this.gameObjects[this.selected[0]].position.y - mousePressed.dy), Math.abs(this.gameObjects[this.selected[0]].position.x - mousePressed.dx));
       this.gameObjects[this.selected[i]].orientation = angle_1 - angle_0;
     }
   }

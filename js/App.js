@@ -167,8 +167,6 @@ App.prototype.registerEventHandlers = function() {
   this.canvas.onmouseup = (event) => {
     this.mousePressed.Down = 0;
     this.mousePressed.Move = 1;
-    this.mousePressed.finalX = 2*((event.clientX / this.canvas.width) - 0.5);
-    this.mousePressed.finalY = -2*((event.clientY / this.canvas.height) - 0.5);
   };
   window.addEventListener('resize', () => this.resize() );
   window.requestAnimationFrame( () => this.update() );
