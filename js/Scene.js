@@ -19,12 +19,19 @@ const Scene = function(gl) {
   this.fsStriped = new Shader(gl, gl.FRAGMENT_SHADER, "striped_fs.essl");
   this.stripedProgram = new Program(gl, this.vsStriped, this.fsStriped);
 
+  this.vsCheckered = new Shader(gl, gl.VERTEX_SHADER, "checkered_vs.essl");
+  this.fsCheckered = new Shader(gl, gl.FRAGMENT_SHADER, "checkered_fs.essl");
+  this.checkeredProgram = new Program(gl, this.vsCheckered, this.fsCheckered);
+
   this.vsBullseye = new Shader(gl, gl.VERTEX_SHADER, "bullseye_vs.essl");
   this.fsBullseye = new Shader(gl, gl.FRAGMENT_SHADER, "bullseye_fs.essl");
   this.bullseyeProgram = new Program(gl, this.vsBullseye, this.fsBullseye);
   
   this.fsBlink = new Shader(gl, gl.FRAGMENT_SHADER, "blinking_fs.essl");
   this.blinkProgram = new Program(gl, this.vsIdle, this.fsBlink);
+
+  this.vsWave = new Shader(gl, gl.VERTEX_SHADER, "waving_vs.essl");
+  this.waveProgram = new Program(gl, this.vsWave, this.fsSolid);
 
   this.triangleGeometry = new TriangleGeometry(gl);
   this.quadGeometry = new QuadGeometry(gl);
@@ -36,6 +43,12 @@ const Scene = function(gl) {
   // this.beanBagGeometry = new BeanBagGeometry(gl);
   
   this.timeAtLastFrame = new Date().getTime();
+
+  this.wavingMaterial = new Material(gl, this.waveProgram);
+  this.wavingMaterial.solidColor.set(1,0,1);
+  this.wavingMatrix = new Mat4();
+  this.wavingMaterial.translationMatrix.set(this.wavingMatrix);
+  this.wavingTriangle = new Mesh(this.triangleGeometry, this.wavingMaterial);
 
   this.blinkingMaterial = new Material(gl, this.blinkProgram);
   this.blinkingMaterial.solidColor.set(1,0,1);
@@ -55,6 +68,12 @@ const Scene = function(gl) {
   this.yellowStripedMaterial.stripeColor2.set(0.8,0.8,0.3,1);
   this.yellowStripedMaterial.stripeWidth.set(0.8);
   this.yellowStripedCircle = new Mesh(this.circleGeometry, this.yellowStripedMaterial);
+
+  this.yellowCheckeredMaterial = new Material(gl, this.checkeredProgram);
+  this.yellowCheckeredMaterial.boxColor1.set(1,1,0,1);
+  this.yellowCheckeredMaterial.boxColor2.set(0.8,0.8,0.3,1);
+  this.yellowCheckeredMaterial.boxWidth.set(0.8);
+  this.yellowCheckeredCircle = new Mesh(this.circleGeometry, this.yellowCheckeredMaterial);
 
   this.pinkBullseyeMaterial = new Material(gl, this.bullseyeProgram);
   this.pinkBullseyeMaterial.stripeColor1.set(0.043, 0.925, 0.976,1);
@@ -121,6 +140,9 @@ const Scene = function(gl) {
   this.coatRack = new GameObject(this.cyanCoatRack);
   this.coatRack.position.set({x:-2, y:0, z:0});
 
+  this.wave = new GameObject(this.wavingTriangle);
+  this.wave.position.set({x:0, y:0, z:0});
+
   this.blink = new GameObject(this.blinkingTriangle);
   this.blink.position.set({x:0, y:0, z:0});
 
@@ -129,11 +151,17 @@ const Scene = function(gl) {
 
   this.lamp = new GameObject(this.yellowLamp);
   this.lamp.position.set({x:0, y:0, z:0});
-  this.gameObjects.push(this.obj2);
+  
+  this.checker = new GameObject(this.yellowCheckeredCircle);
+
+  //this.gameObjects.push(this.checker);
+
+  this.gameObjects.push(this.wave);
+  //this.gameObjects.push(this.obj2);
   // this.gameObjects.push(this.obj3);
-  this.gameObjects.push(this.obj4);
+ // this.gameObjects.push(this.obj4);
   // this.gameObjects.push(this.chair);
-  this.gameObjects.push(this.coatRack);
+  //this.gameObjects.push(this.coatRack);
   // this.gameObjects.push(this.stripes);
   // this.gameObjects.push(this.stripes2);
   // this.gameObjects.push(this.blink);
@@ -146,10 +174,17 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   //jshint bitwise:false
   //jshint unused:false
   const timeAtThisFrame = new Date().getTime();
+  const wavet = ((timeAtThisFrame / 1000.0)%3);
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
 
   this.blinkingMaterial.dt.set(dt * 100);
+  if (wavet > 1.5){
+    this.wavingMaterial.translationMatrix.set(this.wavingMaterial.translationMatrix.translate(new Vec3(0.005, 0, 0)));
+  } else{
+    this.wavingMaterial.translationMatrix.set(this.wavingMaterial.translationMatrix.translate(new Vec3(-0.005, 0, 0)));
+  }
+  
 
   // Press TAB to change selected object
   if(keysPressed["BACK_QUOTE"]){
