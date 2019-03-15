@@ -1,6 +1,6 @@
 // Created by Nico Zingarelli
 "use strict";
-cBeanBagGeometry = function(gl) {
+const BeanBagGeometry = function(gl) {
   this.gl = gl;
   
   this.vertices = [0,0,0]; // Center
