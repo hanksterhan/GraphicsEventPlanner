@@ -44,7 +44,7 @@ const Scene = function(gl) {
   this.coatRackGeometry = new CoatRackGeometry(gl);
   this.plantGeometry = new PlantGeometry(gl);
   this.lampGeometry = new LampGeometry(gl);
-  // this.beanBagGeometry = new BeanBagGeometry(gl);
+  this.beanBagGeometry = new BeanBagGeometry(gl);
   
   this.timeAtLastFrame = new Date().getTime();
 
@@ -111,7 +111,7 @@ const Scene = function(gl) {
   this.cyanPlant = new Mesh(this.plantGeometry, this.cyanMaterial);
   this.cyanLamp = new Mesh(this.plantGeometry, this.cyanMaterial);
   this.yellowLamp = new Mesh(this.lampGeometry, this.yellowMaterial);
-  // this.cyanBeanBag = new Mesh(this.beanBagGeometry, this.cyanMaterial);
+  this.cyanBeanBag = new Mesh(this.beanBagGeometry, this.cyanMaterial);
 
   this.selected = []; // contains indices of the objects that are selected
 
@@ -194,8 +194,6 @@ const Scene = function(gl) {
 };
 
 Scene.prototype.update = function(gl, keysPressed, mousePressed) {
-  //jshint bitwise:false
-  //jshint unused:false
   const timeAtThisFrame = new Date().getTime();
   const wavet = ((timeAtThisFrame / 1000.0)%3);
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
@@ -214,7 +212,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   this.blinkingMaterial.sinVal.set(sin);
   this.heartbeatMaterial.timeDiff.set(timeDiff);
 
-  // Press TAB to change selected object
+  // Press BACK_QUOTE to change selected object
   if(keysPressed["BACK_QUOTE"]){
     if(this.selected.length == 1){
       var nextIndex = (this.selected.pop() + 1) % this.gameObjects.length;
@@ -273,16 +271,16 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.gameObjects.push(this.chair2);
   }
   // If mouse clicked and h is pressed, draw a bean bag where the mouse is clicked:
-  // if(mousePressed.Down && keysPressed.H){
-  //   this.beanBag2 = new GameObject(this.cyanBeanBag);
-  //   this.beanBag2.position.set({x:mousePressed.X*this.camera.windowSize.storage[0], y:mousePressed.Y*this.camera.windowSize.storage[1], z:0});
-  //   this.gameObjects.push(this.beanBag2);
+  if(mousePressed.Down && keysPressed.H){
+    this.beanBag2 = new GameObject(this.cyanBeanBag);
+    this.beanBag2.position.set({x:mousePressed.X*this.camera.windowSize.storage[0], y:mousePressed.Y*this.camera.windowSize.storage[1], z:0});
+    this.gameObjects.push(this.beanBag2);
+  }
 
   if(mousePressed.Down){
     for(var z = 0; z < this.gameObjects.length; z++){
       if(mousePressed.X*this.camera.windowSize.storage[0] <= this.gameObjects[z].position.x + .15 && mousePressed.X*this.camera.windowSize.storage[0] >= this.gameObjects[z].position.x - .15){
         if(mousePressed.Y*this.camera.windowSize.storage[1] <= this.gameObjects[z].position.y + .15 && mousePressed.Y*this.camera.windowSize.storage[1] >= this.gameObjects[z].position.y - .15){
-          // this.selected.push(z);
           this.selected = [];
           this.selected.push(z);
         }
@@ -290,26 +288,6 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     }
   }
   
-  // TODO: if we want movement, make a move method inside gameobjects and pass in keyspressed into gameobject
-  // TODO: if we want unique movement
-  // how to move the triangles from frame to frame
-  // if(keysPressed.W){
-  //   this.gameObjects[0].position.y += 0.01;
-  //   this.trianglePosition2.y -= 0.01;
-  // }
-  // if(keysPressed.A){
-  //   this.trianglePosition.x -= 0.01;
-  //   this.trianglePosition2.x += 0.01;
-  // }
-  // if(keysPressed.S){
-  //   this.trianglePosition.y -= 0.01;
-  //   this.trianglePosition2.y += 0.01;
-  // }
-  // if(keysPressed.D){
-  //   this.trianglePosition.x += 0.01;
-  //   this.trianglePosition2.x -= 0.01;
-
-  // }
   // If mouse clicked and r is pressed, draw a coat rack where the mouse is clicked:
   if(mousePressed.Down && keysPressed.R){
     this.coatRack2 = new GameObject(this.cyanCoatRack);
@@ -325,16 +303,16 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
 
   // Press IJKL to move the camera around
   if(keysPressed.I){
-    this.camera.position.y += 0.05;
-  }
-  if(keysPressed.J){
-    this.camera.position.x -= 0.05;
-  }
-  if(keysPressed.K){
     this.camera.position.y -= 0.05;
   }
-  if(keysPressed.L){
+  if(keysPressed.J){
     this.camera.position.x += 0.05;
+  }
+  if(keysPressed.K){
+    this.camera.position.y += 0.05;
+  }
+  if(keysPressed.L){
+    this.camera.position.x -= 0.05;
   }
   if(keysPressed.A){
     for(var i=0; i<this.selected.length; i++){
@@ -357,10 +335,6 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.camera.windowSize.x += 0.05;
   }
 
-  
-
-
-
   // mouse drag selected objects if mouse is down and moving
   if(mousePressed.Down && mousePressed.Move){
     var ratio = this.camera.windowSize.storage[0] / this.camera.windowSize.storage[1];
@@ -371,7 +345,6 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
       this.gameObjects[this.selected[i]].position.y += dy;
     }
   }
-
 
   // mouse rotate selected objects if mouse is down and moving
   if(!mousePressed.Down && mousePressed.Move){
@@ -389,27 +362,14 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     }
   }
 
-  // PAN 
-  if(mousePressed.Down && mousePressed.Move && this.selected.length == 0){
+  // PAN when mouse down and mouse move and "0" is pressed 
+  if(mousePressed.Down && mousePressed.Move && keysPressed["0"]){
     var ratio = this.camera.windowSize.storage[0] / this.camera.windowSize.storage[1];
-    console.log("ratio: ", ratio)
-    var x_0 = (mousePressed.X * this.camera.windowSize.storage[0] / ratio);
-    console.log("x_0: ", x_0)
-    var y_0 = (mousePressed.Y * this.camera.windowSize.storage[1]);
-    console.log("y_0: ", y_0)
-    var x_1 = (mousePressed.finalX * this.camera.windowSize.storage[0]); 
-    console.log("x_1: ", x_1)
-    var y_1 = (mousePressed.finalY * this.camera.windowSize.storage[1]);
-    console.log("y_1: ", y_1)
-    var horizontal = x_1 - x_0;
-    if (isNaN(horizontal)) horizontal = 0;
-    var vertical = y_1 - y_0;
-    if (isNaN(vertical)) vertical = 0;
-    console.log("horizontal: ", horizontal)
-    console.log("vertical: ", vertical)
+    var dx = (mousePressed.dx * this.camera.windowSize.storage[0]) / (ratio);
+    var dy = (mousePressed.dy * this.camera.windowSize.storage[1]);
+    this.camera.position.x -= dx;
+    this.camera.position.y -= dy;
 
-    this.camera.position.x += horizontal;
-    this.camera.position.y += vertical;
   }
 
   // clear the screen

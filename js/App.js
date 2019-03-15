@@ -115,6 +115,11 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "X"){
       this.keysPressed.X = 1;
     }
+
+    // hold 0 and mouse click + mouse drag to pan
+    if(keyboardMap[event.keyCode] === "0"){
+      this.keysPressed["0"] = 1;
+    }
   };
   document.onkeyup = (event) => {
     if(keyboardMap[event.keyCode] === "W"){
@@ -188,7 +193,10 @@ App.prototype.registerEventHandlers = function() {
     if(event.keyCode === 32){
       this.keysPressed["SPACE"] = 0;
     }
-    //console.log(event.keyCode);
+    // hold 0 and mouse click + mouse drag to pan
+    if(keyboardMap[event.keyCode] === "0"){
+      this.keysPressed["0"] = 0;
+    }
   };
   this.canvas.onmousedown = (event) => {
     // calculate and scale the mouse clicks so that they are where the computer thinks they are
