@@ -78,9 +78,9 @@ const Scene = function(gl) {
   this.yellowStripedCircle = new Mesh(this.circleGeometry, this.yellowStripedMaterial);
 
   this.yellowCheckeredMaterial = new Material(gl, this.checkeredProgram);
-  this.yellowCheckeredMaterial.boxColor1.set(1,1,0,1);
-  this.yellowCheckeredMaterial.boxColor2.set(0.8,0.8,0.3,1);
-  this.yellowCheckeredMaterial.boxWidth.set(0.8);
+  this.yellowCheckeredMaterial.boxColor1.set(0.2,1,0,1);
+  this.yellowCheckeredMaterial.boxColor2.set(0.8,0.38,0.3,1);
+  this.yellowCheckeredMaterial.boxWidth.set(0.3);
   this.yellowCheckeredCircle = new Mesh(this.circleGeometry, this.yellowCheckeredMaterial);
 
   this.pinkBullseyeMaterial = new Material(gl, this.bullseyeProgram);
@@ -165,7 +165,7 @@ const Scene = function(gl) {
   
   this.checker = new GameObject(this.yellowCheckeredCircle);
 
-  //this.gameObjects.push(this.checker);
+  this.gameObjects.push(this.checker);
 
   // this.gameObjects.push(this.wave);
   this.gameObjects.push(this.obj2);
@@ -183,6 +183,14 @@ const Scene = function(gl) {
 
 
   this.camera = new OrthoCamera();
+
+//DROP DOWN GEORGE BENZ
+  document.addEventListener('click', function(e) {
+    e = e || window.event;
+    var target = e.target || e.srcElement,
+        text = target.textContent || target.innerText;  
+    console.log(text);
+}, false);
 };
 
 Scene.prototype.update = function(gl, keysPressed, mousePressed) {
@@ -222,6 +230,28 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
       this.gameObjects.splice(this.selected[i], 1);
     }
     this.selected = [];
+  }
+
+  //MOVE OBJECTS GEORGE BENZ
+  if(keysPressed["LEFT"]){
+    for(var i=this.selected.length-1; i>=0; i--){
+      this.gameObjects[this.selected[i]].position.x -= 0.01;
+    }
+  }
+  if(keysPressed["RIGHT"]){
+    for(var i=this.selected.length-1; i>=0; i--){
+      this.gameObjects[this.selected[i]].position.x += 0.01;
+    }
+  }
+  if(keysPressed["UP"]){
+    for(var i=this.selected.length-1; i>=0; i--){
+      this.gameObjects[this.selected[i]].position.y += 0.01;
+    }
+  }
+  if(keysPressed["DOWN"]){
+    for(var i=this.selected.length-1; i>=0; i--){
+      this.gameObjects[this.selected[i]].position.y -= 0.01;
+    }
   }
 
   // If mouse clicked and p is pressed, draw a plant where the mouse is clicked:
@@ -319,6 +349,20 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     }
   }
 
+  // Zooming in and out GEORGE BENZ
+  if(keysPressed.Z){
+    this.camera.windowSize.y -= 0.05;
+    this.camera.windowSize.x -= 0.05;
+  }
+  if(keysPressed.X){
+    this.camera.windowSize.y += 0.05;
+    this.camera.windowSize.x += 0.05;
+  }
+
+  
+
+
+
   // mouse drag selected objects if mouse is down and moving
   if(mousePressed.Down && mousePressed.Move){
     var ratio = this.camera.windowSize.storage[0] / this.camera.windowSize.storage[1];
@@ -329,6 +373,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
       this.gameObjects[this.selected[i]].position.y += dy;
     }
   }
+
 
   // mouse rotate selected objects if mouse is down and moving
   if(!mousePressed.Down && mousePressed.Move){
@@ -357,6 +402,15 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   for (var i=0; i<this.gameObjects.length; i++){
     this.gameObjects[i].draw(this.camera);
   }
+  //DUPLICATE GEORGE BENZ
+  if(keysPressed["SPACE"]){
+    for (var i =0; i <this.selected.length; i++){
+      this.temp = new GameObject(this.gameObjects[this.selected[i]].mesh);
+      this.temp.position.x += 0.5;
+      this.temp.position.y -= 0.3;
+      this.gameObjects.push(this.temp);
+    }
+  }
 
   // draw selected objects
   var j = 0
@@ -364,6 +418,32 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.gameObjects[this.selected[j]].drawSelected(this.camera, this.yellowMaterial);
     j+=1;
   }
+
 };
+
+//CODE WAS TAKEN FROM https://www.w3schools.com/howto/howto_js_dropdown.asp
+
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
+
 
 

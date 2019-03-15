@@ -88,6 +88,25 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "L"){
       this.keysPressed.L = 1;
     }
+
+    //arrow keys to move selected objects
+    if(event.keyCode === 37){
+      this.keysPressed["LEFT"] = 1;
+    }
+    if(event.keyCode === 38){
+      this.keysPressed["UP"] = 1;
+    }
+    if(event.keyCode === 39){
+      this.keysPressed["RIGHT"] = 1;
+    }
+    if(event.keyCode === 40){
+      this.keysPressed["DOWN"] = 1;
+    }
+
+    if(event.keyCode === 32){
+      this.keysPressed["SPACE"] = 1;
+    }
+    
     // Z for ZOOM
     if(keyboardMap[event.keyCode] === "Z"){
       this.keysPressed.Z = 1;
@@ -147,7 +166,29 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "L"){
       this.keysPressed.L = 0;
     }
-    console.log(event.keyCode);
+    //arrow keys to move selected objects
+    if(event.keyCode === 37){
+      this.keysPressed["LEFT"] = 0;
+    }
+    if(event.keyCode === 38){
+      this.keysPressed["UP"] = 0;
+    }
+    if(event.keyCode === 39){
+      this.keysPressed["RIGHT"] = 0;
+    }
+    if(event.keyCode === 40){
+      this.keysPressed["DOWN"] = 0;
+    }
+    if(keyboardMap[event.keyCode] === "Z"){
+      this.keysPressed.Z = 0;
+    }
+    if(keyboardMap[event.keyCode] === "X"){
+      this.keysPressed.X = 0;
+    }
+    if(event.keyCode === 32){
+      this.keysPressed["SPACE"] = 0;
+    }
+    //console.log(event.keyCode);
   };
   this.canvas.onmousedown = (event) => {
     // calculate and scale the mouse clicks so that they are where the computer thinks they are
