@@ -352,6 +352,8 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
     this.camera.windowSize.x += 0.05;
   }
 
+  
+
 
 
   // mouse drag selected objects if mouse is down and moving
@@ -364,6 +366,7 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
       this.gameObjects[this.selected[i]].position.y += dy;
     }
   }
+
 
   // mouse rotate selected objects if mouse is down and moving
   if(!mousePressed.Down && mousePressed.Move){
@@ -391,6 +394,14 @@ Scene.prototype.update = function(gl, keysPressed, mousePressed) {
   // draw all objects
   for (var i=0; i<this.gameObjects.length; i++){
     this.gameObjects[i].draw(this.camera);
+  }
+  if(keysPressed["SPACE"]){
+    for (var i =0; i <this.selected.length; i++){
+      this.temp = new GameObject(this.gameObjects[this.selected[i]].mesh);
+      this.temp.position.x += 0.5;
+      this.temp.position.y -= 0.3;
+      this.gameObjects.push(this.temp);
+    }
   }
 
   // draw selected objects

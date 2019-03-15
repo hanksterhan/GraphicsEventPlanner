@@ -88,13 +88,7 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "L"){
       this.keysPressed.L = 1;
     }
-<<<<<<< HEAD
-    if(keyboardMap[event.keyCode] === "Z"){
-      this.keysPressed.Z = 1;
-    }
-    if(keyboardMap[event.keyCode] === "X"){
-      this.keysPressed.X = 1;
-    }
+
     //arrow keys to move selected objects
     if(event.keyCode === 37){
       this.keysPressed["LEFT"] = 1;
@@ -108,8 +102,11 @@ App.prototype.registerEventHandlers = function() {
     if(event.keyCode === 40){
       this.keysPressed["DOWN"] = 1;
     }
+
+    if(event.keyCode === 32){
+      this.keysPressed["SPACE"] = 1;
+    }
     
-=======
     // Z for ZOOM
     if(keyboardMap[event.keyCode] === "Z"){
       this.keysPressed.Z = 1;
@@ -118,7 +115,6 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "X"){
       this.keysPressed.X = 1;
     }
->>>>>>> 1c62e66fda59385cd39b9ba11611d4a40e3c6ffa
   };
   document.onkeyup = (event) => {
     if(keyboardMap[event.keyCode] === "W"){
@@ -189,7 +185,10 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "X"){
       this.keysPressed.X = 0;
     }
-    console.log(event.keyCode);
+    if(event.keyCode === 32){
+      this.keysPressed["SPACE"] = 0;
+    }
+    //console.log(event.keyCode);
   };
   this.canvas.onmousedown = (event) => {
     // calculate and scale the mouse clicks so that they are where the computer thinks they are
