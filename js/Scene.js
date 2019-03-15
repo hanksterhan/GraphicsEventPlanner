@@ -30,13 +30,12 @@ const Scene = function(gl) {
   this.fsBlink = new Shader(gl, gl.FRAGMENT_SHADER, "blinking_fs.essl");
   this.blinkProgram = new Program(gl, this.vsIdle, this.fsBlink);
 
-<<<<<<< Updated upstream
   this.vsWave = new Shader(gl, gl.VERTEX_SHADER, "waving_vs.essl");
   this.waveProgram = new Program(gl, this.vsWave, this.fsSolid);
-=======
+
   this.fsHeartbeat = new Shader(gl, gl.FRAGMENT_SHADER, "heartbeat_fs.essl");
   this.heartbeatProgram = new Program(gl, this.vsIdle, this.fsHeartbeat);
->>>>>>> Stashed changes
+
 
   this.triangleGeometry = new TriangleGeometry(gl);
   this.quadGeometry = new QuadGeometry(gl);
