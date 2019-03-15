@@ -83,6 +83,12 @@ const Scene = function(gl) {
   this.yellowCheckeredMaterial.boxWidth.set(0.3);
   this.yellowCheckeredCircle = new Mesh(this.circleGeometry, this.yellowCheckeredMaterial);
 
+  this.cyanCheckeredMaterial = new Material(gl, this.checkeredProgram);
+  this.cyanCheckeredMaterial.boxColor1.set(0,1,1);
+  this.cyanCheckeredMaterial.boxColor2.set(0.2,0,1);
+  this.cyanCheckeredMaterial.boxWidth.set(0.4);
+  this.cyanCheckeredCircle = new Mesh(this.circleGeometry, this.cyanCheckeredMaterial);
+
   this.pinkBullseyeMaterial = new Material(gl, this.bullseyeProgram);
   this.pinkBullseyeMaterial.stripeColor1.set(0.043, 0.925, 0.976,1);
   this.pinkBullseyeMaterial.stripeColor2.set(0.976, 0.043, 0.862, 1);
@@ -122,64 +128,67 @@ const Scene = function(gl) {
 
   
   this.obj2 = new GameObject(this.cyanTriangle);
-  this.obj2.position.set({x:0.3, y:0, z:0});
-
-  // this.obj3 = new GameObject(this.yellowQuad);
-  // this.obj3.position.set({x:0.3, y:0.3, z:0});
+  this.obj2.position.set({x:-3.5, y:0, z:0});
 
   this.obj4 = new GameObject(this.cyanTable);
-  this.obj4.position.set({x:2, y:0, z:0});
+  this.obj4.position.set({x:-3, y:1.5, z:0});
 
   this.chair = new GameObject(this.yellowChair);
-  this.chair.position.set({x:-0.3, y:-0.3, z:0});
+  this.chair.position.set({x:2, y:1.5, z:0});
 
   this.stripes = new GameObject(this.pinkStripedTriangle);
-  this.stripes.position.set({x:0, y:0, z:0});
+  this.stripes.position.set({x:-2, y:1.5, z:0});
 
   this.stripes2 = new GameObject(this.yellowStripedCircle);
-  this.stripes2.position.set({x:0, y:0, z:0});
+  this.stripes2.position.set({x:-2, y:-1.5, z:0});
 
   this.bullseye = new GameObject(this.pinkBullseyeTriangle);
-  this.bullseye.position.set({x:1, y:0, z:0});
+  this.bullseye.position.set({x:-3, y:-1.5, z:0});
 
   this.bullseye2 = new GameObject(this.yellowBullseyeCircle);
-  this.bullseye2.position.set({x:-1, y:0, z:0});
+  this.bullseye2.position.set({x:0, y:-1.5, z:0});
 
   this.coatRack = new GameObject(this.cyanCoatRack);
-  this.coatRack.position.set({x:-2, y:0, z:0});
+  this.coatRack.position.set({x:0, y:1.5, z:0});
 
   this.wave = new GameObject(this.wavingTriangle);
-  this.wave.position.set({x:0, y:0, z:0});
+  this.wave.position.set({x:1, y:1, z:0});
 
   this.blink = new GameObject(this.blinkingTriangle);
-  this.blink.position.set({x:0, y:0, z:0});
+  this.blink.position.set({x:2, y:0, z:0});
 
   this.heartbeat = new GameObject(this.heartbeatTriangle);
-  this.heartbeat.position.set({x:-.5, y:-.5, z:0});
+  this.heartbeat.position.set({x:2, y:-1, z:0});
 
   this.plant = new GameObject(this.cyanPlant);
-  this.plant.position.set({x:0, y:0, z:0});
+  this.plant.position.set({x:3, y:-1.5, z:0});
 
   this.lamp = new GameObject(this.yellowLamp);
-  this.lamp.position.set({x:0, y:0, z:0});
+  this.lamp.position.set({x:3, y:0, z:0});
+
+  this.beanbag = new GameObject(this.cyanBeanBag);
+  this.beanbag.position.set({x:3, y:1.5, z:0});
   
   this.checker = new GameObject(this.yellowCheckeredCircle);
+  this.checker2 = new GameObject(this.cyanCheckeredCircle);
+  this.checker2.position.set({x:3, y:0, z:0});
 
   this.gameObjects.push(this.checker);
-
-  // this.gameObjects.push(this.wave);
+  this.gameObjects.push(this.checker2);
+  this.gameObjects.push(this.wave);
   this.gameObjects.push(this.obj2);
-  // this.gameObjects.push(this.obj3);
- this.gameObjects.push(this.obj4);
-  // this.gameObjects.push(this.chair);
+  this.gameObjects.push(this.obj4);
+  this.gameObjects.push(this.chair);
   this.gameObjects.push(this.coatRack);
-  // this.gameObjects.push(this.stripes);
-  // this.gameObjects.push(this.stripes2);
-  // this.gameObjects.push(this.blink);
-  // this.gameObjects.push(this.lamp);
-  // this.gameObjects.push(this.bullseye);
-  // this.gameObjects.push(this.bullseye2);
-  // this.gameObjects.push(this.heartbeat);
+  this.gameObjects.push(this.stripes);
+  this.gameObjects.push(this.stripes2);
+  this.gameObjects.push(this.plant)
+  this.gameObjects.push(this.blink);
+  this.gameObjects.push(this.lamp);
+  this.gameObjects.push(this.bullseye);
+  this.gameObjects.push(this.bullseye2);
+  this.gameObjects.push(this.heartbeat);
+  this.gameObjects.push(this.beanbag);
 
 
   this.camera = new OrthoCamera();
