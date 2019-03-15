@@ -88,6 +88,7 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "L"){
       this.keysPressed.L = 1;
     }
+<<<<<<< HEAD
     if(keyboardMap[event.keyCode] === "Z"){
       this.keysPressed.Z = 1;
     }
@@ -108,6 +109,16 @@ App.prototype.registerEventHandlers = function() {
       this.keysPressed["DOWN"] = 1;
     }
     
+=======
+    // Z for ZOOM
+    if(keyboardMap[event.keyCode] === "Z"){
+      this.keysPressed.Z = 1;
+    }
+    // X for unZOOM
+    if(keyboardMap[event.keyCode] === "X"){
+      this.keysPressed.X = 1;
+    }
+>>>>>>> 1c62e66fda59385cd39b9ba11611d4a40e3c6ffa
   };
   document.onkeyup = (event) => {
     if(keyboardMap[event.keyCode] === "W"){
@@ -178,7 +189,7 @@ App.prototype.registerEventHandlers = function() {
     if(keyboardMap[event.keyCode] === "X"){
       this.keysPressed.X = 0;
     }
-    //console.log(event.keyCode);
+    console.log(event.keyCode);
   };
   this.canvas.onmousedown = (event) => {
     // calculate and scale the mouse clicks so that they are where the computer thinks they are
